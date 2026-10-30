@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>신나는 바이브 코딩 놀이터! - Vibe & Coding</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Fredoka:wght@600;700;800&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Jua', 'Pretendard', -apple-system, sans-serif;
+      min-height: 100vh;
+      background: #fdfaf3;
+      background-image: 
+        radial-gradient(#ffdfba 12%, transparent 12%),
+        radial-gradient(#baffc9 12%, transparent 12%);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      color: #3b302a;
+      overflow-x: hidden;
+    }
+
+    /* 상단 헤더 */
+    .header {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 3px solid #ffcc00;
+      box-shadow: 0 4px 16px rgba(255, 170, 0, 0.12);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.45rem;
+      font-weight: 800;
+      text-decoration: none;
+      color: #ff5722;
+      letter-spacing: -0.01em;
+      text-shadow: 1px 1px 0 #ffe082;
+      transition: transform 0.2s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05) rotate(-2deg);
+    }
+
+    .logo-icon {
+      font-size: 1.6rem;
+      animation: spinBounce 2.5s infinite;
+      display: inline-block;
+    }
+
+    @keyframes spinBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-4px) rotate(15deg); }
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-item a {
+      text-decoration: none;
+      color: #5d4a41;
+      font-size: 1.1rem;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      background: rgba(255, 235, 167, 0.4);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .nav-item a:hover {
+      color: #ff3366;
+      background: #ffffff;
+      border-color: #ffb703;
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 4px 10px rgba(255, 183, 3, 0.3);
+    }
+
+    /* 햄버거 버튼 (기본은 숨김) */
+    .hamburger-btn {
+      display: none;
+      background: #fff8e1;
+      border: 2px solid #ffb703;
+      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      padding: 9px 8px;
+      cursor: pointer;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      transition: all 0.25s ease;
+      z-index: 102;
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 24px;
+      height: 3px;
+      background: #ff5722;
+      border-radius: 3px;
+      transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    }
+
+    /* 햄버거 버튼 클릭 시 X 아이콘으로 변환 */
+    .hamburger-btn.active {
+      background: #ffe0b2;
+    }
+
+    .hamburger-btn.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger-btn.active span:nth-child(2) {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+
+    .hamburger-btn.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* 모바일 오버레이 */
+    .nav-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* =======================================
+       키즈 파스텔 스타일의 히어로 영역
+       ======================================= */
+    .hero-retro-section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background: linear-gradient(140deg, #fff3e0 0%, #e8f5e9 45%, #e1f5fe 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 40px 60px;
+      overflow: hidden;
+      border-bottom: 4px dashed #ffb703;
+    }
+
+    /* 둥둥 떠다니는 귀여운 스티커 데코 */
+    .deco-sticker {
+      position: absolute;
+      font-size: 2.2rem;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+      animation: floatMotion 4s ease-in-out infinite;
+    }
+
+    .sticker-1 { top: 120px; left: 6%; animation-delay: 0s; }
+    .sticker-2 { top: 180px; right: 8%; animation-delay: 1.2s; font-size: 2.5rem; }
+    .sticker-3 { bottom: 120px; left: 10%; animation-delay: 2.3s; font-size: 2rem; }
+    .sticker-4 { bottom: 90px; right: 12%; animation-delay: 0.8s; font-size: 2.4rem; }
+
+    @keyframes floatMotion {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(8deg); }
+    }
+
+    /* 좌상단 인덱스 배지 */
+    .retro-badge-top-left {
+      position: absolute;
+      top: 100px;
+      left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      padding: 6px 14px;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border: 2px solid #ffd166;
+      font-size: 0.95rem;
+      color: #ff6b6b;
+      z-index: 10;
+    }
+
+    /* 우상단 작업 단계 인덱스 */
+    .retro-steps-top-right {
+      position: absolute;
+      top: 96px;
+      right: 48px;
+      font-size: 0.95rem;
+      color: #7d8597;
+      line-height: 1.8;
+      text-align: right;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 8px 16px;
+      border-radius: 16px;
+      border: 2px dashed #a0c4ff;
+    }
+
+    .retro-steps-top-right .active-step {
+      color: #ff5722;
+      font-weight: bold;
+    }
+
+    /* 히어로 중앙 무대 */
+    .hero-stage {
+      position: relative;
+      max-width: 1160px;
+      width: 100%;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 레트로 컴퓨터 토이 모니터 */
+    .retro-mac {
+      position: relative;
+      width: 330px;
+      height: 400px;
+      background: linear-gradient(145deg, #fff9e6 0%, #ffeedb 100%);
+      border: 6px solid #ffcc80;
+      border-radius: 36px 36px 26px 26px;
+      box-shadow: 
+        0 20px 35px rgba(255, 152, 0, 0.2),
+        0 8px 12px rgba(0, 0, 0, 0.05),
+        inset 0 4px 6px rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 24px 20px;
+      z-index: 2;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .retro-mac:hover {
+      transform: scale(1.03) rotate(-1deg);
+    }
+
+    /* 모니터 CRT 화면 베젤 */
+    .crt-screen-bezel {
+      width: 100%;
+      height: 250px;
+      background: #ffe0b2;
+      border-radius: 24px;
+      padding: 12px;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 모니터 화면 본체 */
+    .crt-screen {
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 12px rgba(255, 204, 128, 0.4);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #ffb74d;
+    }
+
+    /* 화면 안의 'hello' 필기체 텍스트 */
+    .hello-text {
+      font-family: 'Nanum Pen Script', 'Fredoka', cursive, sans-serif;
+      font-size: 5.5rem;
+      color: #ff4081;
+      line-height: 1;
+      transform: rotate(-3deg);
+      user-select: none;
+      filter: drop-shadow(2px 2px 0 #ffe082);
+    }
+
+    .hello-sub {
+      margin-top: 4px;
+      font-family: 'Jua', sans-serif;
+      font-size: 0.95rem;
+      color: #42a5f5;
+      letter-spacing: 0.05em;
+    }
+
+    /* 플로피 디스크 슬롯 */
+    .floppy-slot-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 14px;
+      margin-top: 24px;
+    }
+
+    .floppy-slot {
+      width: 110px;
+      height: 10px;
+      background: #ffab91;
+      border: 2px solid #ff7043;
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .floppy-slot::after {
+      content: "";
+      position: absolute;
+      right: -16px;
+      top: 0;
+      width: 8px;
+      height: 8px;
+      background: #4caf50;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #81c784;
+    }
+
+    /* 영문 타이포그래피 (Vibe & Coding) */
+    .hero-word-left {
+      position: absolute;
+      left: 2%;
+      top: 24%;
+      font-family: 'Fredoka', 'Jua', sans-serif;
+      font-size: clamp(3.8rem, 9.5vw, 8.8rem);
+      font-weight: 800;
+      color: #ff9100;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      z-index: 3;
+      pointer-events: none;
+      text-shadow: 4px 6px 0 #ffe082, 0 10px 20px rgba(255, 152, 0, 0.2);
+    }
+
+    .hero-word-right {
+      position: absolute;
+      right: 2%;
+      bottom: 14%;
+      font-family: 'Fredoka', 'Jua', sans-serif;
+      font-size: clamp(3.8rem, 9.5vw, 8.8rem);
+      font-weight: 800;
+      color: #ff2a6d;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      z-index: 3;
+      pointer-events: none;
+      text-shadow: 4px 6px 0 #ffcdd2, 0 10px 20px rgba(255, 42, 109, 0.25);
+    }
+
+    /* 스크롤 다운 가이드 */
+    .scroll-down-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: #ff7043;
+      font-size: 1rem;
+      text-decoration: none;
+      background: #ffffff;
+      padding: 8px 18px;
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(255, 112, 67, 0.15);
+      border: 2px solid #ffcc80;
+      transition: all 0.2s ease;
+    }
+
+    .scroll-down-hint:hover {
+      transform: translateX(-50%) translateY(-3px);
+      box-shadow: 0 6px 18px rgba(255, 112, 67, 0.25);
+    }
+
+    .scroll-down-hint .arrow-down {
+      animation: bounce 1.6s infinite;
+      font-size: 1.1rem;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* =======================================
+       본문 섹션들 스타일 (키즈 파스텔 톤)
+       ======================================= */
+    main {
+      background: transparent;
+    }
+
+    section {
+      min-height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 20px;
+      scroll-margin-top: 72px;
+    }
+
+    .container {
+      background: #ffffff;
+      border: 4px solid #ffe082;
+      border-radius: 36px;
+      padding: 52px 44px;
+      max-width: 860px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(255, 183, 77, 0.15), 0 4px 10px rgba(0, 0, 0, 0.04);
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: #fff3e0;
+      border: 2px solid #ff9800;
+      color: #f57c00;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 8px rgba(255, 152, 0, 0.15);
+    }
+
+    h1, h2 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 18px;
+      color: #2e1f16;
+      text-shadow: 2px 2px 0 #ffe082;
+    }
+
+    .description {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #6d4c41;
+      margin-bottom: 32px;
+      word-break: keep-all;
+    }
+
+    /* 홈 섹션 강조 박스 */
+    .hero-highlight {
+      background: #fff8e1;
+      border: 3px dashed #ffb300;
+      border-radius: 24px;
+      padding: 24px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 16px;
+    }
+
+    .highlight-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .highlight-item .num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ff5722;
+    }
+
+    .highlight-item .label {
+      font-size: 1rem;
+      color: #795548;
+    }
+
+    .hero-divider {
+      width: 2px;
+      height: 44px;
+      background: #ffe082;
+    }
+
+    /* 특징 섹션 4 그리드 */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      text-align: left;
+    }
+
+    .feature-card {
+      background: #fafafa;
+      border: 3px solid #e0e0e0;
+      border-radius: 26px;
+      padding: 26px;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feature-card:nth-child(1) { border-color: #ffcc80; background: #fffde7; }
+    .feature-card:nth-child(2) { border-color: #b3e5fc; background: #e1f5fe; }
+    .feature-card:nth-child(3) { border-color: #c8e6c9; background: #e8f5e9; }
+    .feature-card:nth-child(4) { border-color: #f8bbd0; background: #fce4ec; }
+
+    .feature-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-card .icon-box {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      background: #ffffff;
+      border: 2px solid rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #37474f;
+    }
+
+    .feature-card p {
+      font-size: 1.05rem;
+      color: #546e7a;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    /* 비교 섹션 */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .comparison-card {
+      border-radius: 28px;
+      padding: 28px;
+      background: #ffffff;
+      border: 4px solid #e0e0e0;
+    }
+
+    .comparison-card.traditional {
+      background: #f5f5f5;
+      border-color: #cfd8dc;
+    }
+
+    .comparison-card.vibe {
+      background: #fff8e1;
+      border-color: #ffb74d;
+      box-shadow: 0 10px 24px rgba(255, 183, 77, 0.18);
+    }
+
+    .comparison-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #3e2723;
+    }
+
+    .comparison-card.vibe h3 {
+      color: #e65100;
+    }
+
+    .comparison-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .comparison-list li {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: #5d4037;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .comparison-list li strong {
+      color: #212121;
+      min-width: 72px;
+      display: inline-block;
+      font-size: 1rem;
+      background: #ffffff;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .summary-box {
+      margin-top: 24px;
+      padding: 20px 24px;
+      border-radius: 20px;
+      background: #fff3e0;
+      border: 3px solid #ffcc80;
+      font-size: 1.15rem;
+      color: #bf360c;
+      line-height: 1.6;
+    }
+
+    /* 푸터 스타일 */
+    .footer {
+      width: 100%;
+      background: #ffffff;
+      border-top: 4px solid #ffe082;
+      padding: 40px 20px;
+      color: #795548;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-address {
+      color: #4e342e;
+      font-style: normal;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .footer-copyright {
+      color: #8d6e63;
+      font-size: 0.95rem;
+    }
+
+    /* 반응형 스타일 */
+    @media (max-width: 900px) {
+      .hero-word-left {
+        left: 4%;
+        top: 16%;
+      }
+      .hero-word-right {
+        right: 4%;
+        bottom: 8%;
+      }
+      .retro-badge-top-left {
+        left: 20px;
+        top: 85px;
+      }
+      .retro-steps-top-right {
+        right: 20px;
+        top: 85px;
+      }
+      .retro-mac {
+        width: 270px;
+        height: 330px;
+        padding: 24px 18px 16px;
+      }
+      .crt-screen-bezel {
+        height: 210px;
+      }
+      .hello-text {
+        font-size: 4rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-inner {
+        padding: 10px 14px;
+        width: 100%;
+      }
+      .logo {
+        font-size: 1.15rem;
+        gap: 6px;
+      }
+      .logo-icon {
+        font-size: 1.35rem;
+      }
+      /* 햄버거 버튼 노출 및 우측 끝 밀착 */
+      .hamburger-btn {
+        display: flex;
+        margin-left: auto; /* 우측 끝으로 확실히 정렬 */
+      }
+
+      /* 내비게이션 메뉴를 슬라이드 다운/팝업 드롭다운 형태로 전환 */
+      .nav-menu {
+        position: fixed;
+        top: 72px;
+        right: 16px;
+        left: 16px;
+        background: #ffffff;
+        border: 3px solid #ffcc00;
+        border-radius: 24px;
+        box-shadow: 0 16px 36px rgba(255, 152, 0, 0.25);
+        padding: 24px 20px;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 101;
+        transform: translateY(-20px) scale(0.95);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .nav-menu.active {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-item {
+        width: 100%;
+        text-align: center;
+      }
+
+      .nav-item a {
+        display: block;
+        width: 100%;
+        font-size: 1.15rem;
+        padding: 12px 20px;
+        border-radius: 16px;
+        background: #fff8e1;
+      }
+
+      .retro-steps-top-right {
+        display: none;
+      }
+      .deco-sticker {
+        display: none;
+      }
+      .hero-stage {
+        min-height: 440px;
+      }
+      .retro-mac {
+        width: 230px;
+        height: 290px;
+        padding: 18px 14px 12px;
+      }
+      .crt-screen-bezel {
+        height: 180px;
+      }
+      .hello-text {
+        font-size: 3.2rem;
+      }
+      .floppy-slot-wrap {
+        margin-top: 16px;
+      }
+      .floppy-slot {
+        width: 80px;
+      }
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-highlight {
+        flex-direction: column;
+        gap: 14px;
+      }
+      .hero-divider {
+        width: 100%;
+        height: 2px;
+      }
+      .container {
+        padding: 32px 20px;
+        border-radius: 26px;
+      }
+      h1, h2 {
+        font-size: 1.8rem;
+      }
+      .description {
+        font-size: 1.05rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 상단 헤더 -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#hero" class="logo">
+        <span class="logo-icon">🚀</span>
+        <span>바이브코딩 놀이터</span>
+      </a>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a href="#hero">홈</a></li>
+          <li class="nav-item"><a href="#about">소개</a></li>
+          <li class="nav-item"><a href="#features">특징</a></li>
+          <li class="nav-item"><a href="#differences">차이점</a></li>
+        </ul>
+      </nav>
+
+      <!-- 모바일 햄버거 버튼 -->
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="메뉴 열기">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 모바일 메뉴 배경 딤(오버레이) -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- ==============================================
+       키즈 파스텔 히어로 영역: 토이 컴퓨터 + Vibe & Coding
+       ============================================== -->
+  <section class="hero-retro-section" id="hero">
+    <!-- 아기자기한 떠다니는 스티커들 -->
+    <div class="deco-sticker sticker-1">⭐</div>
+    <div class="deco-sticker sticker-2">🎈</div>
+    <div class="deco-sticker sticker-3">🎨</div>
+    <div class="deco-sticker sticker-4">🤖</div>
+
+    <!-- 좌상단 인덱스 배지 -->
+    <div class="retro-badge-top-left">
+      <span>✨ 신나는 상상 코딩 놀이!</span>
+    </div>
+
+    <!-- 우상단 작업 단계 인덱스 -->
+    <div class="retro-steps-top-right">
+      <div>01 신나는 생각 💡</div>
+      <div class="active-step">02 느낌 말하기 💬</div>
+      <div>03 AI 뚝딱 코딩 🤖</div>
+      <div>04 나만의 앱 완성 🎉</div>
+    </div>
+
+    <!-- 중앙 스테이지 -->
+    <div class="hero-stage">
+      <!-- 좌측 영문 단어 1: Vibe (따뜻한 오렌지 옐로우 볼드) -->
+      <div class="hero-word-left">Vibe</div>
+
+      <!-- 중앙 토이 레트로 컴퓨터 (hello) -->
+      <div class="retro-mac">
+        <div class="crt-screen-bezel">
+          <div class="crt-screen">
+            <div class="hello-text">hello</div>
+            <div class="hello-sub">🎮 AI 놀이터 🎮</div>
+          </div>
+        </div>
+        <div class="floppy-slot-wrap">
+          <div class="floppy-slot"></div>
+        </div>
+      </div>
+
+      <!-- 우측 영문 단어 2: Coding (통통 튀는 핑크 레드) -->
+      <div class="hero-word-right">Coding</div>
+    </div>
+
+    <!-- 아래로 스크롤 안내 -->
+    <a href="#about" class="scroll-down-hint">
+      <span>아래로 내려가기 👇</span>
+      <span class="arrow-down">&#8595;</span>
+    </a>
+  </section>
+
+  <main>
+    <!-- 섹션 1: 바이브 코딩이란? (소개) -->
+    <section id="about">
+      <div class="container">
+        <div class="badge">🌈 Vibe Coding 이란?</div>
+        <h1>바이브 코딩이란?</h1>
+        <p class="description">
+          어려운 영어 문법이나 복잡한 기호를 외우지 않아도 돼요! <br>
+          <strong>"친구에게 말하듯 AI와 편하게 이야기하면"</strong> 
+          내가 상상한 멋진 게임과 웹사이트가 마법처럼 뚝딱 만들어지는 즐거운 코딩 방식이랍니다! ✨
+        </p>
+
+        <div class="hero-highlight">
+          <div class="highlight-item">
+            <span class="num">🗣️ 자연어</span>
+            <span class="label">한국어로 편하게 말해요</span>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="highlight-item">
+            <span class="num">⚡ 초고속</span>
+            <span class="label">상상하자마자 눈앞에 짠!</span>
+          </div>
+          <div class="hero-divider"></div>
+          <div class="highlight-item">
+            <span class="num">🤖 AI 짝꿍</span>
+            <span class="label">AI 친구와 함께 만들어요</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 섹션 2: 특징 (독립 전용 섹션) -->
+    <section id="features">
+      <div class="container">
+        <div class="badge">⭐ Key Features</div>
+        <h2>바이브 코딩의 신나는 특징!</h2>
+        <p class="description">
+          아이디어만 있으면 누구나 개발자가 될 수 있어요. 
+          바이브 코딩의 4가지 신기한 마법을 소개합니다!
+        </p>
+
+        <div class="features-grid">
+          <!-- 특징 1 -->
+          <div class="feature-card">
+            <div class="icon-box">💬</div>
+            <h3>말로 하는 코딩</h3>
+            <p>
+              "우주선이 날아다니는 게임 만들어줘!"처럼 평소 쓰던 말로 이야기하면 AI가 알아서 프로그램을 만들어줘요.
+            </p>
+          </div>
+
+          <!-- 특징 2 -->
+          <div class="feature-card">
+            <div class="icon-box">⚡</div>
+            <h3>번개처럼 빠른 완성</h3>
+            <p>
+              오래 기다릴 필요 없이 단 몇 분 만에 내가 상상한 화면과 버튼이 실제로 움직이는 걸 바로 확인할 수 있어요.
+            </p>
+          </div>
+
+          <!-- 특징 3 -->
+          <div class="feature-card">
+            <div class="icon-box">🤖</div>
+            <h3>똑똑한 AI 비밀친구</h3>
+            <p>
+              복잡하고 어려운 기계 언어는 AI 친구가 대신 써줘요. 우리는 어떤 멋진 걸 만들지 재미있는 상상만 하면 돼요!
+            </p>
+          </div>
+
+          <!-- 특징 4 -->
+          <div class="feature-card">
+            <div class="icon-box">🎨</div>
+            <h3>내 맘대로 꾸미기</h3>
+            <p>
+              "배경을 노란색으로 바꿔줘!", "공룡 그림 넣어줘!" 하고 바로바로 이야기하며 내 스타일대로 고칠 수 있어요.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 섹션 3: 기존 코딩과의 차이점 -->
+    <section id="differences">
+      <div class="container">
+        <div class="badge">🔍 Comparison</div>
+        <h2>기존 코딩과 어떻게 다를까요?</h2>
+        <p class="description">
+          어렵고 딱딱했던 옛날 코딩에서, 즐겁게 상상력을 펼치는 놀이 같은 코딩으로 바뀌었어요!
+        </p>
+
+        <div class="comparison-grid">
+          <!-- 기존 코딩 방식 -->
+          <div class="comparison-card traditional">
+            <h3>🧩 기존 코딩 (어려운 방식)</h3>
+            <ul class="comparison-list">
+              <li>
+                <strong>사용 언어</strong>
+                <span>C, Python 등 복잡한 영어 기호와 문법</span>
+              </li>
+              <li>
+                <strong>어려운 점</strong>
+                <span>점(.) 하나만 잘못 찍어도 에러가 나고 멈춰요</span>
+              </li>
+              <li>
+                <strong>시작하기</strong>
+                <span>수학, 알고리즘 등 공부할 게 너무 많아요</span>
+              </li>
+              <li>
+                <strong>만드는 법</strong>
+                <span>한 줄 한 줄 손으로 힘들게 타이핑해요</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 바이브 코딩 방식 -->
+          <div class="comparison-card vibe">
+            <h3>🎈 바이브 코딩 (즐거운 방식)</h3>
+            <ul class="comparison-list">
+              <li>
+                <strong>사용 언어</strong>
+                <span>우리가 쓰는 따뜻한 우리말 (자연어 대화)</span>
+              </li>
+              <li>
+                <strong>즐거운 점</strong>
+                <span>틀릴까 봐 걱정할 필요 없이 편하게 이야기해요</span>
+              </li>
+              <li>
+                <strong>시작하기</strong>
+                <span>재미있는 상상력과 아이디어만 있으면 준비 끝!</span>
+              </li>
+              <li>
+                <strong>만드는 법</strong>
+                <span>AI 친구에게 생각을 말하고 함께 다듬어가요</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="summary-box">
+          🎉 <strong>한 줄 요약:</strong> 바이브 코딩은 컴퓨터 기호만 치던 방식에서 벗어나, 어린이가 <strong>멋진 영화의 총감독님</strong>이 되어 AI와 함께 작품을 만드는 신나는 모험이에요!
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <address class="footer-address">
+        🏢 전라북도 전주시 기린대로 219
+      </address>
+      <p class="footer-copyright">
+        Copyright &copy; LEG. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- 햄버거 메뉴 동작 스크립트 -->
+  <script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
+    const navOverlay = document.getElementById('navOverlay');
+    const navLinks = document.querySelectorAll('.nav-item a');
+
+    // 토글 함수
+    function toggleMenu() {
+      const isOpen = navMenu.classList.toggle('active');
+      hamburgerBtn.classList.toggle('active');
+      navOverlay.classList.toggle('active');
+      hamburgerBtn.setAttribute('aria-expanded', isOpen);
+    }
+
+    // 닫기 함수
+    function closeMenu() {
+      navMenu.classList.remove('active');
+      hamburgerBtn.classList.remove('active');
+      navOverlay.classList.remove('active');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    // 햄버거 버튼 클릭 이벤트
+    hamburgerBtn.addEventListener('click', toggleMenu);
+
+    // 배경 어두운 영역 클릭 시 닫기
+    navOverlay.addEventListener('click', closeMenu);
+
+    // 메뉴 항목 클릭 시 메뉴 닫고 해당 섹션으로 부드럽게 이동
+    navLinks.forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // 창 크기 확대 시 모바일 메뉴 상태 자동 리셋
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        closeMenu();
+      }
+    });
+  </script>
+</body>
+</html>
